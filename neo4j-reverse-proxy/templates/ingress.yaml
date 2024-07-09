@@ -1,23 +1,23 @@
-{{- template "neo4j.reverseProxy.tlsValidation" . -}}
+{{- template "neo4jReverseProxy.reverseProxy.tlsValidation" . -}}
 {{- if $.Values.reverseProxy.ingress.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "neo4j.fullname" . }}-reverseproxy-ingress
+  name: {{ include "neo4jReverseProxy.fullname" . }}-reverseproxy-ingress
   namespace: "{{ .Release.Namespace }}"
-  {{- include "neo4j.annotations" $.Values.reverseProxy.ingress.annotations | indent 2 }}
+  {{- include "neo4jReverseProxy.annotations" $.Values.reverseProxy.ingress.annotations | indent 2 }}
 spec:
   ingressClassName: "{{ .Values.reverseProxy.ingress.className | default "nginx" }}"
-  {{- include "neo4j.ingress.tls" . | indent 2 }}
+  {{- include "neo4jReverseProxy.ingress.tls" . | indent 2 }}
   rules:
     - http:
         paths:
           - pathType: Prefix
             backend:
               service:
-                name: {{ include "neo4j.fullname" . }}-reverseproxy-service
+                name: {{ include "neo4jReverseProxy.fullname" . }}-reverseproxy-service
                 port:
-                  number: {{ include "neo4j.reverseProxy.port" . }}
+                  number: {{ include "neo4jReverseProxy.reverseProxy.port" . }}
             path: /
       {{- include ".neo4j.ingress.host" . | indent 6 -}}
 {{- end -}}

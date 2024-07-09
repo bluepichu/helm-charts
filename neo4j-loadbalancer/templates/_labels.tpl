@@ -1,4 +1,4 @@
-{{- define "neo4j.labels" -}}
+{{- define "neo4jLoadbalancer.labels" -}}
     {{- with .labels -}}
         {{- range $name, $value := . }}
 {{ $name | quote}}: {{ $value | quote }}
@@ -6,7 +6,7 @@
     {{- end -}}
 {{- end }}
 
-{{- define "neo4j.annotations" -}}
+{{- define "neo4jLoadbalancer.annotations" -}}
     {{- with . -}}
         {{- range $name, $value := . }}
 {{ $name | quote }}: {{ $value | quote }}

@@ -6,7 +6,7 @@ metadata:
   name: "{{ $.Release.Name }}-pv"
   labels:
     # the app name is used to link this persistent volume to the Neo4j StatefulSet
-    app: "{{ template "neo4j.appName" $ }}"
+    app: "{{ template "neo4jPersistentVolume.appName" $ }}"
     helm.neo4j.com/volume-role: "data"
 spec:
   accessModes:
@@ -30,7 +30,7 @@ metadata:
   name: "{{ $.Release.Name }}-pvc"
   labels:
     helm.neo4j.com/volume-role: "data"
-    app: "{{ template "neo4j.appName" $ }}"
+    app: "{{ template "neo4jPersistentVolume.appName" $ }}"
 spec:
   storageClassName: "{{ .storageClassName }}"
   volumeName: "{{ $.Release.Name }}-pv"

@@ -1,25 +1,25 @@
-{{- $port := include "neo4j.reverseProxy.port" . -}}
+{{- $port := include "neo4jReverseProxy.reverseProxy.port" . -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "neo4j.fullname" . }}-reverseproxy-dep
+  name: {{ include "neo4jReverseProxy.fullname" . }}-reverseproxy-dep
   labels:
-    name: {{ include "neo4j.fullname" . }}-reverseproxy-dep
+    name: {{ include "neo4jReverseProxy.fullname" . }}-reverseproxy-dep
   namespace: "{{ .Release.Namespace }}"
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: {{ include "neo4j.fullname" . }}-reverseproxy
+      name: {{ include "neo4jReverseProxy.fullname" . }}-reverseproxy
   template:
     metadata:
-      name: {{ include "neo4j.fullname" . }}-reverseproxy
+      name: {{ include "neo4jReverseProxy.fullname" . }}-reverseproxy
       labels:
-        name: {{ include "neo4j.fullname" . }}-reverseproxy
+        name: {{ include "neo4jReverseProxy.fullname" . }}-reverseproxy
     spec:
       securityContext: {{ toYaml .Values.reverseProxy.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ include "neo4j.fullname" . }}-reverseproxy
+        - name: {{ include "neo4jReverseProxy.fullname" . }}-reverseproxy
           image: {{ $.Values.reverseProxy.image }}
           imagePullPolicy: Always
           securityContext: {{ toYaml .Values.reverseProxy.containerSecurityContext | nindent 12 }}
@@ -38,12 +38,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "neo4j.fullname" . }}-reverseproxy-service
+  name: {{ include "neo4jReverseProxy.fullname" . }}-reverseproxy-service
   namespace: "{{ .Release.Namespace }}"
 spec:
   type: ClusterIP
   selector:
-    name: {{ include "neo4j.fullname" . }}-reverseproxy
+    name: {{ include "neo4jReverseProxy.fullname" . }}-reverseproxy
   ports:
     - protocol: TCP
       port: {{ $port }}

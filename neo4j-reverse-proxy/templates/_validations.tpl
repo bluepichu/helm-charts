@@ -1,4 +1,4 @@
-{{- define "neo4j.reverseProxy.tlsValidation" -}}
+{{- define "neo4jReverseProxy.reverseProxy.tlsValidation" -}}
     {{- if and $.Values.reverseProxy.ingress.enabled $.Values.reverseProxy.ingress.tls.enabled -}}
         {{- if empty $.Values.reverseProxy.ingress.tls.config -}}
             {{ fail (printf "Empty tls config !!") }}

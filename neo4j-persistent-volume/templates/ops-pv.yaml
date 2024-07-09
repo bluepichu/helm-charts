@@ -7,7 +7,7 @@ metadata:
   name: "{{ $.Release.Name }}-ops"
   labels:
     helm.neo4j.com/volume-role: "ops"
-    app: "{{ template "neo4j.appName" $ }}"
+    app: "{{ template "neo4jPersistentVolume.appName" $ }}"
 spec:
   accessModes:
     - ReadWriteMany
@@ -24,7 +24,7 @@ metadata:
   name: "{{ $.Release.Name }}-ops"
   labels:
     helm.neo4j.com/volume-role: "ops"
-    app: "{{ template "neo4j.appName" $ }}"
+    app: "{{ template "neo4jPersistentVolume.appName" $ }}"
 spec:
   storageClassName: "{{ .storageClassName }}"
   volumeName: "{{ $.Release.Name }}-ops"

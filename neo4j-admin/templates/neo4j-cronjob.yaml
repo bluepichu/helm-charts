@@ -1,22 +1,22 @@
-{{- template "neo4j.backup.checkDatabaseIPAndServiceName" . -}}
-{{- template "neo4j.backup.checkAzureStorageAccountName" . -}}
-{{- template "neo4j.backup.checkIfSecretExistsOrNot" . -}}
-{{- template "neo4j.backup.checkBucketName" . -}}
-{{- template "neo4j.backup.checkServiceAccountName" . -}}
-{{- template "neo4j.checkNodeSelectorLabels" . -}}
+{{- template "neo4jAdmin.backup.checkDatabaseIPAndServiceName" . -}}
+{{- template "neo4jAdmin.backup.checkAzureStorageAccountName" . -}}
+{{- template "neo4jAdmin.backup.checkIfSecretExistsOrNot" . -}}
+{{- template "neo4jAdmin.backup.checkBucketName" . -}}
+{{- template "neo4jAdmin.backup.checkServiceAccountName" . -}}
+{{- template "neo4jAdmin.checkNodeSelectorLabels" . -}}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: "{{ include "neo4j.fullname" . }}"
+  name: "{{ include "neo4jAdmin.fullname" . }}"
   labels:
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
-    app.kubernetes.io/instance: {{ include "neo4j.fullname" . | quote }}
+    app.kubernetes.io/instance: {{ include "neo4jAdmin.fullname" . | quote }}
     {{- if and (not (kindIs "invalid" .Values.backup.aggregate)) .Values.backup.aggregate.enabled }}
     app.kubernetes.io/component: aggregate-backup
     {{- else }}
     app.kubernetes.io/component: backup
     {{- end }}
-    {{- include "neo4j.labels" $.Values.neo4j.labels | indent 4 }}
+    {{- include "neo4jAdmin.labels" $.Values.neo4j.labels | indent 4 }}
 spec:
   schedule: {{ $.Values.neo4j.jobSchedule | default "* * * * *" | quote }}
   concurrencyPolicy: Forbid
@@ -28,9 +28,9 @@ spec:
       template:
         metadata:
           annotations:
-            {{- include "neo4j.annotations" $.Values.neo4j.podAnnotations | indent 12 }}
+            {{- include "neo4jAdmin.annotations" $.Values.neo4j.podAnnotations | indent 12 }}
           labels:
-            {{- include "neo4j.labels" $.Values.neo4j.podLabels | indent 12 }}
+            {{- include "neo4jAdmin.labels" $.Values.neo4j.podLabels | indent 12 }}
         spec:
           {{- if .Values.serviceAccountName }}
           serviceAccountName: {{ .Values.serviceAccountName }}
@@ -39,14 +39,14 @@ spec:
           {{- end }}
           restartPolicy: Never
           securityContext: {{ .Values.securityContext | toYaml  | nindent 12 }}
-          {{- include "neo4j.tolerations" .Values.tolerations | nindent 10 }}
-          {{- include "neo4j.affinity" .Values.affinity| nindent 10 }}
-          {{- include "neo4j.nodeSelector" . }}
+          {{- include "neo4jAdmin.tolerations" .Values.tolerations | nindent 10 }}
+          {{- include "neo4jAdmin.affinity" .Values.affinity| nindent 10 }}
+          {{- include "neo4jAdmin.nodeSelector" . }}
           containers:
             - name: graph-backup
               image: {{ .Values.neo4j.image }}:{{ .Values.neo4j.imageTag }}
               imagePullPolicy: Always
-              resources: {{- include "neo4j.resourcesAndLimits" . | nindent 16 }}
+              resources: {{- include "neo4jAdmin.resourcesAndLimits" . | nindent 16 }}
               env:
                 - name: DATABASE_SERVICE_NAME
                   value: {{ .Values.backup.databaseAdminServiceName  | trim }}
